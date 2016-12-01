@@ -1,0 +1,23 @@
+{
+	"manifest_version": 2,
+	"name": "Dumpulate",
+	"description": "An extension for Fipe Electron.io app",
+	"version": "1.0",
+	"icons": {
+		"48": "img/icon48.png"
+	},
+	"browser_action": {
+		"default_icon": "img/icon48.png"
+	},
+	"permissions":[
+		"activeTab"
+	],
+	"content_scripts": [{
+	        "matches": ["http://*/*"],
+	        "js":      ["contentscript.js","/js/moment.min.js"],
+	        "run_at": "document_end"
+	}],
+	"background": {
+		"scripts": ["background.js"]
+	}
+}
