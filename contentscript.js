@@ -45,7 +45,7 @@ if (inputFields && inputFields.length) {
 				case "text":
 					inputFields[field].value = "Test";
 					inputFields[field].dispatchEvent(event);
-					
+
 					break;
 
 				case "url":
@@ -95,7 +95,7 @@ if (inputFields && inputFields.length) {
 
 if (selectFields && selectFields.length) {
 	for (field = 0; field < selectFields.length; field++) {
-		selectFields[field].value = selectFields[field].options[Math.floor(Math.random() * selectFields[field].length)].text;
+		selectFields[field].value = selectFields[field].options[Math.floor(Math.random() * selectFields[field].options.length)].value;
 		selectFields[field].dispatchEvent(event);
 	}
 }else{
@@ -104,7 +104,7 @@ if (selectFields && selectFields.length) {
 
 if (textAreas && textAreas.length) {
 	for (area = 0; area < textAreas.length; area++) {
-		textAreas[area].value = "Who lives in a pineapple under the sea ??? Spongebob squarepants !"
+		textAreas[area].value = "Spongebob"
 		textAreas[area].dispatchEvent(event);
 	}
 }else{
