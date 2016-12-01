@@ -3,6 +3,7 @@ var selectFields = document.getElementsByTagName("select");
 var textAreas = document.getElementsByTagName("textarea");
 
 var radios={};
+var event = new Event('change');
 
 if (inputFields && inputFields.length) {
 	for (field = 0; field < inputFields.length; field++) {
@@ -32,21 +33,25 @@ if (inputFields && inputFields.length) {
 					date.date = Math.floor(Math.random() * (date.max - date.min)) + date.min;
 
 					inputFields[field].value = moment(date.date).format('YYYY-MM-DD');
+					inputFields[field].dispatchEvent(event);
 					break;
 
 				case "email":
 
 					inputFields[field].value = "test@google.com";
+					inputFields[field].dispatchEvent(event);
 					break;
 
 				case "text":
-
-					inputFields[field].value = "www.google.com";
+					inputFields[field].value = "Test";
+					inputFields[field].dispatchEvent(event);
+					
 					break;
 
 				case "url":
 					
 					inputFields[field].value = "www.google.com";
+					inputFields[field].dispatchEvent(event);
 					break;
 
 				case "radio":
@@ -85,6 +90,7 @@ if (inputFields && inputFields.length) {
 if (selectFields && selectFields.length) {
 	for (field = 0; field < selectFields.length; field++) {
 		selectFields[field].value = selectFields[field].options[Math.floor(Math.random() * selectFields[field].length)].text;
+		selectFields[field].dispatchEvent(event);
 	}
 }else{
 	selectFields = [];
@@ -93,6 +99,7 @@ if (selectFields && selectFields.length) {
 if (textAreas && textAreas.length) {
 	for (area = 0; area < textAreas.length; area++) {
 		textAreas[area].value = "Who lives in a pineapple under the sea ??? Spongebob squarepants !"
+		textAreas[area].dispatchEvent(event);
 	}
 }else{
 	textAreas = [];
