@@ -66,6 +66,12 @@ if (inputFields && inputFields.length) {
 
 					break;
 
+				case "password":
+					inputFields[field].value = "123!pass@#%";
+					inputFields[field].dispatchEvent(event);
+					break;
+
+
 				default:
 
 
