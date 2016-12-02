@@ -1,122 +1,144 @@
-var inputFields = document.getElementsByTagName("input");
-var selectFields = document.getElementsByTagName("select");
-var textAreas = document.getElementsByTagName("textarea");
+var forms = document.forms;
 
-var radios={};
-var event = new Event('change');
+for (var form = 0; form < forms.length; form++) {
 
-if (inputFields && inputFields.length) {
-	for (field = 0; field < inputFields.length; field++) {
-		var type = inputFields[field].type;
-		if (type) {
-			switch (type) {
+	var inputFields = document.forms[form].getElementsByTagName("input");
+	var selectFields = document.forms[form].getElementsByTagName("select");
+	var textAreas = document.forms[form].getElementsByTagName("textarea");
 
-				case "date":
-					var date = {};
-					if (inputFields[field].min) {
-						date.min = new Date(inputFields[field].min).getTime();
+	var radios = {};
+	var event = new Event('change');
 
-					}
-					if (inputFields[field].max) {
-						date.max = new Date(inputFields[field].max).getTime();
-					}
+	function validator(entity) {
 
-					if (!date.min) {
-						date.min = new Date().getTime();
-					}
-
-					if (!date.max) {
-						date.max = date.min + (365 * 24 * 60 * 60 * 1000);
-					}
+		function insertAfter(referenceNode, newNode) {
+			referenceNode.parentNode.insertBefore(newNode, referenceNode.nextSibling);
+		}
 
 
-					date.date = Math.floor(Math.random() * (date.max - date.min)) + date.min;
 
-					inputFields[field].value = moment(date.date).format('YYYY-MM-DD');
-					inputFields[field].dispatchEvent(event);
-					break;
+		if (!entity.checkValidity() || !entity.name) {
+			entity.style.borderColor = "red";
+			var el = document.createElement("span");
+			el.innerHTML = "<b>This field has failed validation !</b>";
+			insertAfter(entity, el);
+		}
+	}
 
-				case "email":
+	if (inputFields && inputFields.length) {
+		for (field = 0; field < inputFields.length; field++) {
+			var type = inputFields[field].type;
+			if (type) {
+				switch (type) {
 
-					inputFields[field].value = "test@google.com";
-					inputFields[field].dispatchEvent(event);
-					break;
+					case "date":
+						var date = {};
+						if (inputFields[field].min) {
+							date.min = new Date(inputFields[field].min).getTime();
 
-				case "text":
-					inputFields[field].value = "Test";
-					inputFields[field].dispatchEvent(event);
-
-					break;
-
-				case "url":
-					
-					inputFields[field].value = "www.google.com";
-					inputFields[field].dispatchEvent(event);
-					break;
-
-				case "radio":
-
-					if(inputFields[field].name){
-						if(!radios[inputFields[field].name]){
-							radios[inputFields[field].name] = [inputFields[field]];
-						}else{
-							radios[inputFields[field].name].push(inputFields[field]);
 						}
-					}
+						if (inputFields[field].max) {
+							date.max = new Date(inputFields[field].max).getTime();
+						}
 
-					break;
+						if (!date.min) {
+							date.min = new Date().getTime();
+						}
 
-				case "password":
-					inputFields[field].value = "123!pass@#%";
-					inputFields[field].dispatchEvent(event);
-					break;
+						if (!date.max) {
+							date.max = date.min + (365 * 24 * 60 * 60 * 1000);
+						}
 
 
-				default:
+						date.date = Math.floor(Math.random() * (date.max - date.min)) + date.min;
 
+						inputFields[field].value = moment(date.date).format('YYYY-MM-DD');
+						inputFields[field].dispatchEvent(event);
+						validator(inputFields[field]);
+						break;
+
+					case "email":
+
+						inputFields[field].value = "test@google.com";
+						inputFields[field].dispatchEvent(event);
+						validator(inputFields[field]);
+						break;
+
+					case "text":
+						inputFields[field].value = "Test";
+						inputFields[field].dispatchEvent(event);
+						validator(inputFields[field]);
+
+						break;
+
+					case "url":
+
+						inputFields[field].value = "www.google.com";
+						inputFields[field].dispatchEvent(event);
+						validator(inputFields[field]);
+						break;
+
+					case "radio":
+
+						if (inputFields[field].name) {
+							if (!radios[inputFields[field].name]) {
+								radios[inputFields[field].name] = [inputFields[field]];
+							} else {
+								radios[inputFields[field].name].push(inputFields[field]);
+							}
+							validator(inputFields[field]);
+						}
+
+						break;
+
+					case "password":
+						inputFields[field].value = "123!pass@#%";
+						inputFields[field].dispatchEvent(event);
+						validator(inputFields[field]);
+						break;
+
+
+					default:
+
+
+				}
 
 			}
 
 		}
-
+	} else {
+		inputFields = [];
 	}
-}else{
-	inputFields = [];
-}
 
-if(Object.keys(radios).length){
-	for(radio in radios){
-		if(radios[radio].length){
-			radios[radio][Math.floor(Math.random()*radios[radio].length)].checked=true;
+	if (Object.keys(radios).length) {
+		for (radio in radios) {
+			if (radios[radio].length) {
+				radios[radio][Math.floor(Math.random() * radios[radio].length)].checked = true;
+
+			}
 		}
 	}
-}
 
 
-if (selectFields && selectFields.length) {
-	for (field = 0; field < selectFields.length; field++) {
-		selectFields[field].value = selectFields[field].options[Math.floor(Math.random() * selectFields[field].options.length)].value;
-		selectFields[field].dispatchEvent(event);
+	if (selectFields && selectFields.length) {
+		for (field = 0; field < selectFields.length; field++) {
+			selectFields[field].value = selectFields[field].options[Math.floor(Math.random() * selectFields[field].options.length)].value;
+			selectFields[field].dispatchEvent(event);
+			validator(selectFields[field]);
+		}
+	} else {
+		selectFields = [];
 	}
-}else{
-	selectFields = [];
-}
 
-if (textAreas && textAreas.length) {
-	for (area = 0; area < textAreas.length; area++) {
-		textAreas[area].value = "Spongebob"
-		textAreas[area].dispatchEvent(event);
+	if (textAreas && textAreas.length) {
+		for (area = 0; area < textAreas.length; area++) {
+			textAreas[area].value = "Spongebob"
+			textAreas[area].dispatchEvent(event);
+			validator(textAreas[area]);
+		}
+	} else {
+		textAreas = [];
 	}
-}else{
-	textAreas = [];
+
+
 }
-
-
-// var validators = inputFields.concat(selectFields,textAreas)
-
-// for (field = 0; field < validators.length; field++) {
-// 	if(!validators[field].checkValidity()){
-// 		validators[field].style.borderColor="red"
-// 	}
-	
-// }
