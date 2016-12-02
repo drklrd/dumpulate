@@ -84,13 +84,13 @@ if (inputFields && inputFields.length) {
 	inputFields = [];
 }
 
-// if(Object.keys(radios).length){
-// 	for(radio in radios){
-// 		if(radios[radio].length){
-// 			radios[radio][Math.floor(Math.random()*radios[radio].length)].checked=true;
-// 		}
-// 	}
-// }
+if(Object.keys(radios).length){
+	for(radio in radios){
+		if(radios[radio].length){
+			radios[radio][Math.floor(Math.random()*radios[radio].length)].checked=true;
+		}
+	}
+}
 
 
 if (selectFields && selectFields.length) {
