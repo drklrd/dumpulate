@@ -1,13 +1,4 @@
-var forms = document.forms;
-
-for (var form = 0; form < forms.length; form++) {
-
-	var inputFields = document.forms[form].getElementsByTagName("input");
-	var selectFields = document.forms[form].getElementsByTagName("select");
-	var textAreas = document.forms[form].getElementsByTagName("textarea");
-
-	var radios = {};
-	var event = new Event('change');
+(function(){
 
 	function validator(entity) {
 
@@ -15,130 +6,151 @@ for (var form = 0; form < forms.length; form++) {
 			referenceNode.parentNode.insertBefore(newNode, referenceNode.nextSibling);
 		}
 
-
-
-		if (!entity.checkValidity() || !entity.name) {
+		function validityHighlighter(entity, message) {
 			entity.style.borderColor = "red";
 			var el = document.createElement("span");
-			el.innerHTML = "<b>This field has failed validation !</b>";
+			el.innerHTML = "<b>" + message + "</b>";
 			insertAfter(entity, el);
+		}
+
+		if (!entity.name) {
+			validityHighlighter(entity, "This field is missing NAME attribute");
+		}
+
+		if (entity.nodeName === "INPUT" && !entity.getAttribute("type")) {
+			validityHighlighter(entity, "This INPUT field is missing type attribute.Defaults to text");
 		}
 	}
 
-	if (inputFields && inputFields.length) {
-		for (field = 0; field < inputFields.length; field++) {
-			var type = inputFields[field].type;
-			if (type) {
-				switch (type) {
+	var forms = document.forms;
 
-					case "date":
-						var date = {};
-						if (inputFields[field].min) {
-							date.min = new Date(inputFields[field].min).getTime();
+	for (var form = 0; form < forms.length; form++) {
 
-						}
-						if (inputFields[field].max) {
-							date.max = new Date(inputFields[field].max).getTime();
-						}
+		var inputFields = document.forms[form].getElementsByTagName("input");
+		var selectFields = document.forms[form].getElementsByTagName("select");
+		var textAreas = document.forms[form].getElementsByTagName("textarea");
 
-						if (!date.min) {
-							date.min = new Date().getTime();
-						}
-
-						if (!date.max) {
-							date.max = date.min + (365 * 24 * 60 * 60 * 1000);
-						}
+		var radios = {};
+		var event = new Event('change');
 
 
-						date.date = Math.floor(Math.random() * (date.max - date.min)) + date.min;
+		if (inputFields && inputFields.length) {
+			for (field = 0; field < inputFields.length; field++) {
+				var type = inputFields[field].type;
+				if (type) {
+					switch (type) {
 
-						inputFields[field].value = moment(date.date).format('YYYY-MM-DD');
-						inputFields[field].dispatchEvent(event);
-						validator(inputFields[field]);
-						break;
+						case "date":
+							var date = {};
+							if (inputFields[field].min) {
+								date.min = new Date(inputFields[field].min).getTime();
 
-					case "email":
+							}
+							if (inputFields[field].max) {
+								date.max = new Date(inputFields[field].max).getTime();
+							}
 
-						inputFields[field].value = "test@google.com";
-						inputFields[field].dispatchEvent(event);
-						validator(inputFields[field]);
-						break;
+							if (!date.min) {
+								date.min = new Date().getTime();
+							}
 
-					case "text":
-						inputFields[field].value = "Test";
-						inputFields[field].dispatchEvent(event);
-						validator(inputFields[field]);
+							if (!date.max) {
+								date.max = date.min + (365 * 24 * 60 * 60 * 1000);
+							}
 
-						break;
 
-					case "url":
+							date.date = Math.floor(Math.random() * (date.max - date.min)) + date.min;
 
-						inputFields[field].value = "www.google.com";
-						inputFields[field].dispatchEvent(event);
-						validator(inputFields[field]);
-						break;
+							inputFields[field].value = moment(date.date).format('YYYY-MM-DD');
+							inputFields[field].dispatchEvent(event);
+							validator(inputFields[field]);
+							break;
 
-					case "radio":
+						case "email":
 
-						if (inputFields[field].name) {
-							if (!radios[inputFields[field].name]) {
-								radios[inputFields[field].name] = [inputFields[field]];
-							} else {
-								radios[inputFields[field].name].push(inputFields[field]);
+							inputFields[field].value = "test@google.com";
+							inputFields[field].dispatchEvent(event);
+							validator(inputFields[field]);
+							break;
+
+						case "text":
+							inputFields[field].value = "Tester";
+							inputFields[field].dispatchEvent(event);
+							validator(inputFields[field]);
+
+							break;
+
+						case "url":
+
+							inputFields[field].value = "www.google.com";
+							inputFields[field].dispatchEvent(event);
+							validator(inputFields[field]);
+							break;
+
+						case "radio":
+
+							if (inputFields[field].name) {
+								if (!radios[inputFields[field].name]) {
+									radios[inputFields[field].name] = [inputFields[field]];
+								} else {
+									radios[inputFields[field].name].push(inputFields[field]);
+								}
+
 							}
 							validator(inputFields[field]);
-						}
+							break;
 
-						break;
-
-					case "password":
-						inputFields[field].value = "123!pass@#%";
-						inputFields[field].dispatchEvent(event);
-						validator(inputFields[field]);
-						break;
+						case "password":
+							inputFields[field].value = "123!pass@#%";
+							inputFields[field].dispatchEvent(event);
+							validator(inputFields[field]);
+							break;
 
 
-					default:
+						default:
 
+
+					}
 
 				}
 
 			}
-
+		} else {
+			inputFields = [];
 		}
-	} else {
-		inputFields = [];
-	}
 
-	if (Object.keys(radios).length) {
-		for (radio in radios) {
-			if (radios[radio].length) {
-				radios[radio][Math.floor(Math.random() * radios[radio].length)].checked = true;
+		if (Object.keys(radios).length) {
+			for (radio in radios) {
+				if (radios[radio].length) {
+					radios[radio][Math.floor(Math.random() * radios[radio].length)].checked = true;
 
+				}
 			}
 		}
-	}
 
 
-	if (selectFields && selectFields.length) {
-		for (field = 0; field < selectFields.length; field++) {
-			selectFields[field].value = selectFields[field].options[Math.floor(Math.random() * selectFields[field].options.length)].value;
-			selectFields[field].dispatchEvent(event);
-			validator(selectFields[field]);
+		if (selectFields && selectFields.length) {
+			for (field = 0; field < selectFields.length; field++) {
+				selectFields[field].value = selectFields[field].options[Math.floor(Math.random() * selectFields[field].options.length)].value;
+				selectFields[field].dispatchEvent(event);
+				validator(selectFields[field]);
+			}
+		} else {
+			selectFields = [];
 		}
-	} else {
-		selectFields = [];
-	}
 
-	if (textAreas && textAreas.length) {
-		for (area = 0; area < textAreas.length; area++) {
-			textAreas[area].value = "Spongebob"
-			textAreas[area].dispatchEvent(event);
-			validator(textAreas[area]);
+		if (textAreas && textAreas.length) {
+			for (area = 0; area < textAreas.length; area++) {
+				textAreas[area].value = "Spongebob"
+				textAreas[area].dispatchEvent(event);
+				validator(textAreas[area]);
+			}
+		} else {
+			textAreas = [];
 		}
-	} else {
-		textAreas = [];
+
+
 	}
 
+})();
 
-}
