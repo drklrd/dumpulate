@@ -1,4 +1,27 @@
 (function(){
+	
+	function valueAssosicate(entity){
+
+		var entityType = entity.nodeName;
+
+		switch(entityType){
+
+			case "INPUT" :
+				if(entity.name){
+					return expressionMatches(entity.name)
+				}else{
+					return templates.wordCreator();
+				}
+
+				break;
+
+			default :
+
+		}
+
+
+	}
+
 
 	function validator(entity) {
 
@@ -74,7 +97,7 @@
 							break;
 
 						case "text":
-							inputFields[field].value = "Tester";
+							inputFields[field].value = valueAssosicate(inputFields[field]);
 							inputFields[field].dispatchEvent(event);
 							validator(inputFields[field]);
 

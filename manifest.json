@@ -14,8 +14,8 @@
 	],
 	"content_scripts": [{
 	        "matches": ["http://*/*"],
-	        "js":      ["contentscript.js","/js/moment.min.js"],
-	        "run_at": "document_end"
+	        "js": ["templates.js","/js/moment.min.js","contentscript.js"]
+	        
 	}],
 	"background": {
 		"scripts": ["background.js"]
