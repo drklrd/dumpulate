@@ -50,6 +50,11 @@
 
 	var forms = document.forms;
 
+	if(!forms.length){
+		alert('No Form element(s) found ! Make sure the input fields are within form elements.');
+		return;
+	}
+
 	for (var form = 0; form < forms.length; form++) {
 
 		var inputFields = document.forms[form].getElementsByTagName("input");
