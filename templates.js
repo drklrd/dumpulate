@@ -12,7 +12,7 @@ var templates = {
 		for (var len = 0; len < wordLength; len++) {
 			word = word + this.commons[this.randomNumber(this.commons.length)];
 		}
-		return word;
+		return word.toLowerCase();
 	},
 	randomNumber: function(length) {
 		return Math.floor(Math.random() * length);
@@ -38,13 +38,15 @@ function checkMatch(entity, against) {
 
 	var match = false;
 
-	var attributesToCheck = ['name', 'type', 'placeholder'];
+	var attributesToCheck = ['name', 'type', 'placeholder','ng-model'];
 
-	attributesToCheck.forEach(function(attribute) {
-		if (entity[attribute] && entity[attribute].toLowerCase().indexOf(against) !== -1) {
+	for(var attr=0;attr<attributesToCheck.length;attr++){
+		var attribute = attributesToCheck[attr];
+		if (entity.getAttribute(attribute) && entity.getAttribute(attribute).toLowerCase().indexOf(against) !== -1) {
 			match = true;
+			break;
 		}
-	})
+	}
 
 	return match;
 
@@ -52,17 +54,26 @@ function checkMatch(entity, against) {
 
 function expressionMatches(entity, against) {
 
-	if (checkMatch(entity, 'username')) {
-		return templates.usernameGenerator();
-	} else if (checkMatch(entity, 'name')) {
-		return templates.nameGenerator();
-	} else if (checkMatch(entity, 'url')) {
-		return templates.urlGenerator();
-	} else if (checkMatch(entity, 'email')) {
-		return templates.emailGenerator();
-	} else {
-		return templates.wordCreator();
+	var matchAgainst = ['username', 'name','url','email'];
+
+	var match = {
+		status : false,
+		in : undefined
+	};
+
+	for(var match=0;match<matchAgainst.length;match++){
+		if (checkMatch(entity, matchAgainst[match])) {
+			match = {
+				status : true,
+				in : matchAgainst[match]
+			}
+			break;
+		}
 	}
+
+	return match.status ? templates[match.in+'Generator']() : templates.wordCreator();
+
+	
 
 
 }

@@ -1,21 +1,21 @@
-(function(){
-	
-	function valueAssosicate(entity){
+(function() {
+
+	function valueAssosicate(entity) {
 
 		var entityType = entity.nodeName;
 
-		switch(entityType){
+		switch (entityType) {
 
-			case "INPUT" :
-				if(entity){
+			case "INPUT":
+				if (entity) {
 					return expressionMatches(entity)
-				}else{
+				} else {
 					return templates.wordCreator();
 				}
 
 				break;
 
-			default :
+			default:
 
 		}
 
@@ -26,7 +26,7 @@
 	function validator(entity) {
 
 		function insertAfter(referenceNode, newNode) {
-			if(referenceNode.nextSibling){
+			if (referenceNode.nextSibling) {
 				referenceNode.parentNode.removeChild(referenceNode.nextSibling)
 			}
 			referenceNode.parentNode.insertBefore(newNode, referenceNode.nextSibling);
@@ -50,35 +50,43 @@
 
 	var forms = document.forms;
 
-	if(!forms.length){
+	if (!forms.length) {
 		alert('No Form element(s) found ! Make sure the input fields are within form elements.');
 		return;
 	}
 
 	for (var form = 0; form < forms.length; form++) {
 
-		var inputFields = document.forms[form].getElementsByTagName("input");
-		var selectFields = document.forms[form].getElementsByTagName("select");
-		var textAreas = document.forms[form].getElementsByTagName("textarea");
+
+		var tags = ['input','select','textarea'];
+
+		var Fields = {};
+
+		(function tagSelector(){
+			tags.forEach(function(tag){
+				Fields[tag+'Fields'] = document.forms[form].getElementsByTagName(tag).length ? document.forms[form].getElementsByTagName(tag) : []
+				
+			})
+		})();
 
 		var radios = {};
 		var event = new Event('change');
 
 
-		if (inputFields && inputFields.length) {
-			for (field = 0; field < inputFields.length; field++) {
-				var type = inputFields[field].type;
+		if (Fields.inputFields && Fields.inputFields.length) {
+			for (field = 0; field < Fields.inputFields.length; field++) {
+				var type = Fields.inputFields[field].type;
 				if (type) {
 					switch (type) {
 
 						case "date":
 							var date = {};
-							if (inputFields[field].min) {
-								date.min = new Date(inputFields[field].min).getTime();
+							if (Fields.inputFields[field].min) {
+								date.min = new Date(Fields.inputFields[field].min).getTime();
 
 							}
-							if (inputFields[field].max) {
-								date.max = new Date(inputFields[field].max).getTime();
+							if (Fields.inputFields[field].max) {
+								date.max = new Date(Fields.inputFields[field].max).getTime();
 							}
 
 							if (!date.min) {
@@ -92,49 +100,49 @@
 
 							date.date = Math.floor(Math.random() * (date.max - date.min)) + date.min;
 
-							inputFields[field].value = moment(date.date).format('YYYY-MM-DD');
-							inputFields[field].dispatchEvent(event);
-							validator(inputFields[field]);
+							Fields.inputFields[field].value = moment(date.date).format('YYYY-MM-DD');
+							Fields.inputFields[field].dispatchEvent(event);
+							validator(Fields.inputFields[field]);
 							break;
 
 						case "email":
 
-							inputFields[field].value = valueAssosicate(inputFields[field]);
-							inputFields[field].dispatchEvent(event);
-							validator(inputFields[field]);
+							Fields.inputFields[field].value = valueAssosicate(Fields.inputFields[field]);
+							Fields.inputFields[field].dispatchEvent(event);
+							validator(Fields.inputFields[field]);
 							break;
 
 						case "text":
-							inputFields[field].value = valueAssosicate(inputFields[field]);
-							inputFields[field].dispatchEvent(event);
-							validator(inputFields[field]);
+							Fields.inputFields[field].value = valueAssosicate(Fields.inputFields[field]);
+							Fields.inputFields[field].dispatchEvent(event);
+							validator(Fields.inputFields[field]);
 
 							break;
 
 						case "url":
 
-							inputFields[field].value = "www.google.com";
-							inputFields[field].dispatchEvent(event);
-							validator(inputFields[field]);
+							Fields.inputFields[field].value = "www.google.com";
+							Fields.inputFields[field].dispatchEvent(event);
+							validator(Fields.inputFields[field]);
 							break;
 
 						case "radio":
 
-							if (inputFields[field].name) {
-								if (!radios[inputFields[field].name]) {
-									radios[inputFields[field].name] = [inputFields[field]];
+							if (Fields.inputFields[field].name) {
+								if (!radios[Fields.inputFields[field].name]) {
+									radios[Fields.inputFields[field].name] = [Fields.inputFields[field]];
 								} else {
-									radios[inputFields[field].name].push(inputFields[field]);
+									radios[Fields.inputFields[field].name].push(Fields.inputFields[field]);
 								}
 
 							}
-							validator(inputFields[field]);
+							validator(Fields.inputFields[field]);
 							break;
 
 						case "password":
-							inputFields[field].value = "123!pass@#%";
-							inputFields[field].dispatchEvent(event);
-							validator(inputFields[field]);
+							Fields.inputFields[field].value = "123!pass@#%";
+							Fields.inputFields[field].dispatchEvent(event);
+							validator(Fields.inputFields[field]);
 							break;
 
 
@@ -147,7 +155,7 @@
 
 			}
 		} else {
-			inputFields = [];
+			Fields.inputFields = [];
 		}
 
 		if (Object.keys(radios).length) {
@@ -160,28 +168,27 @@
 		}
 
 
-		if (selectFields && selectFields.length) {
-			for (field = 0; field < selectFields.length; field++) {
-				selectFields[field].value = selectFields[field].options[Math.floor(Math.random() * selectFields[field].options.length)].value;
-				selectFields[field].dispatchEvent(event);
-				validator(selectFields[field]);
+		if (Fields.selectFields && Fields.selectFields.length) {
+			for (field = 0; field < Fields.selectFields.length; field++) {
+				Fields.selectFields[field].value = Fields.selectFields[field].options[Math.floor(Math.random() * Fields.selectFields[field].options.length)].value;
+				Fields.selectFields[field].dispatchEvent(event);
+				validator(Fields.selectFields[field]);
 			}
 		} else {
-			selectFields = [];
+			Fields.selectFields = [];
 		}
 
-		if (textAreas && textAreas.length) {
-			for (area = 0; area < textAreas.length; area++) {
-				textAreas[area].value = "Spongebob"
-				textAreas[area].dispatchEvent(event);
-				validator(textAreas[area]);
+		if (Fields.textareaFields && Fields.textareaFields.length) {
+			for (area = 0; area < Fields.textareaFields.length; area++) {
+				Fields.textareaFields[area].value = "The one ring to rule them all !"
+				Fields.textareaFields[area].dispatchEvent(event);
+				validator(Fields.textareaFields[area]);
 			}
 		} else {
-			textAreas = [];
+			Fields.textareaFields = [];
 		}
 
 
 	}
 
 })();
-
