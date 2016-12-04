@@ -1,3 +1,4 @@
+
 var templates = {
 	firstNames: ['John', 'Harry', 'Prince', 'Walter', 'Frodo', 'Samwise', 'Legolas'],
 	lastNames: ['Potter', 'Bright', 'Baggins', 'Gamgee'],

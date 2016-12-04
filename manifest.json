@@ -1,7 +1,7 @@
 {
 	"manifest_version": 2,
 	"name": "Dumpulate",
-	"description": "An extension for Fipe Electron.io app",
+	"description": "A simple chrome based extension to populate dummy data into forms while testing.",
 	"version": "1.0",
 	"icons": {
 		"48": "img/icon48.png"
@@ -14,7 +14,8 @@
 	],
 	"content_scripts": [{
 	        "matches": ["http://*/*"],
-	        "js": ["templates.js","/js/moment.min.js","contentscript.js"]
+	        "js": ["/js/moment.min.js"],
+	        "run_at": "document_start"
 	        
 	}],
 	"background": {
