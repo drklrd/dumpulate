@@ -1,4 +1,3 @@
-
 var templates = {
 	firstNames: ['John', 'Harry', 'Prince', 'Walter', 'Frodo', 'Samwise', 'Legolas'],
 	lastNames: ['Potter', 'Bright', 'Baggins', 'Gamgee'],
@@ -35,15 +34,31 @@ var templates = {
 	}
 }
 
+function checkMatch(entity, against) {
+
+	var match = false;
+
+	var attributesToCheck = ['name', 'type', 'placeholder'];
+
+	attributesToCheck.forEach(function(attribute) {
+		if (entity[attribute] && entity[attribute].toLowerCase().indexOf(against) !== -1) {
+			match = true;
+		}
+	})
+
+	return match;
+
+}
+
 function expressionMatches(entity, against) {
 
-	if (entity.indexOf("username") !== -1) {
+	if (checkMatch(entity, 'username')) {
 		return templates.usernameGenerator();
-	} else if (entity.indexOf("name") !== -1) {
+	} else if (checkMatch(entity, 'name')) {
 		return templates.nameGenerator();
-	} else if (entity.indexOf("url") !== -1) {
+	} else if (checkMatch(entity, 'url')) {
 		return templates.urlGenerator();
-	} else if (entity.indexOf("email") !== -1) {
+	} else if (checkMatch(entity, 'email')) {
 		return templates.emailGenerator();
 	} else {
 		return templates.wordCreator();

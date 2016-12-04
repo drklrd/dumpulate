@@ -7,8 +7,8 @@
 		switch(entityType){
 
 			case "INPUT" :
-				if(entity.name){
-					return expressionMatches(entity.name)
+				if(entity){
+					return expressionMatches(entity)
 				}else{
 					return templates.wordCreator();
 				}
@@ -26,6 +26,9 @@
 	function validator(entity) {
 
 		function insertAfter(referenceNode, newNode) {
+			if(referenceNode.nextSibling){
+				referenceNode.parentNode.removeChild(referenceNode.nextSibling)
+			}
 			referenceNode.parentNode.insertBefore(newNode, referenceNode.nextSibling);
 		}
 
@@ -91,7 +94,7 @@
 
 						case "email":
 
-							inputFields[field].value = "test@google.com";
+							inputFields[field].value = valueAssosicate(inputFields[field]);
 							inputFields[field].dispatchEvent(event);
 							validator(inputFields[field]);
 							break;
