@@ -38,7 +38,7 @@ function checkMatch(entity, against) {
 
 	var match = false;
 
-	var attributesToCheck = ['name', 'type', 'placeholder','ng-model'];
+	var attributesToCheck = ['type','name','placeholder','ng-model'];
 
 	for(var attr=0;attr<attributesToCheck.length;attr++){
 		var attribute = attributesToCheck[attr];

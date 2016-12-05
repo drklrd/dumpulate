@@ -7,12 +7,7 @@
 		switch (entityType) {
 
 			case "INPUT":
-				if (entity) {
-					return expressionMatches(entity)
-				} else {
-					return templates.wordCreator();
-				}
-
+				return entity ? expressionMatches(entity) : templates.wordCreator();
 				break;
 
 			default:
@@ -58,14 +53,14 @@
 	for (var form = 0; form < forms.length; form++) {
 
 
-		var tags = ['input','select','textarea'];
+		var tags = ['input', 'select', 'textarea'];
 
 		var Fields = {};
 
-		(function tagSelector(){
-			tags.forEach(function(tag){
-				Fields[tag+'Fields'] = document.forms[form].getElementsByTagName(tag).length ? document.forms[form].getElementsByTagName(tag) : []
-				
+		(function tagSelector() {
+			tags.forEach(function(tag) {
+				Fields[tag + 'Fields'] = document.forms[form].getElementsByTagName(tag).length ? document.forms[form].getElementsByTagName(tag) : []
+
 			})
 		})();
 
