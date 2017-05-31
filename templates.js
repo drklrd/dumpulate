@@ -37,43 +37,36 @@ var templates = {
 function checkMatch(entity, against) {
 
 	var match = false;
-
-	var attributesToCheck = ['type','name','placeholder','ng-model'];
-
-	for(var attr=0;attr<attributesToCheck.length;attr++){
+	var attributesToCheck = ['type', 'name', 'placeholder', 'ng-model'];
+	for (var attr = 0; attr < attributesToCheck.length; attr++) {
 		var attribute = attributesToCheck[attr];
 		if (entity.getAttribute(attribute) && entity.getAttribute(attribute).toLowerCase().indexOf(against) !== -1) {
 			match = true;
 			break;
 		}
 	}
-
 	return match;
 
 }
 
 function expressionMatches(entity, against) {
 
-	var matchAgainst = ['username', 'name','url','email'];
-
+	var matchAgainst = ['username', 'name', 'url', 'email'];
 	var match = {
-		status : false,
+		status: false,
 		in : undefined
 	};
-
-	for(var match=0;match<matchAgainst.length;match++){
+	for (var match = 0; match < matchAgainst.length; match++) {
 		if (checkMatch(entity, matchAgainst[match])) {
 			match = {
-				status : true,
+				status: true,
 				in : matchAgainst[match]
 			}
 			break;
 		}
 	}
+	return match.status ? templates[match.in + 'Generator']() : templates.wordCreator();
 
-	return match.status ? templates[match.in+'Generator']() : templates.wordCreator();
-
-	
 
 
 }

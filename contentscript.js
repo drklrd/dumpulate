@@ -1,22 +1,14 @@
 (function() {
 
 	function valueAssosicate(entity) {
-
 		var entityType = entity.nodeName;
-
 		switch (entityType) {
-
 			case "INPUT":
 				return entity ? expressionMatches(entity) : templates.wordCreator();
 				break;
-
 			default:
-
 		}
-
-
 	}
-
 
 	function validator(entity) {
 
@@ -51,29 +43,22 @@
 	}
 
 	for (var form = 0; form < forms.length; form++) {
-
-
 		var tags = ['input', 'select', 'textarea'];
-
 		var Fields = {};
-
 		(function tagSelector() {
 			tags.forEach(function(tag) {
 				Fields[tag + 'Fields'] = document.forms[form].getElementsByTagName(tag).length ? document.forms[form].getElementsByTagName(tag) : []
 
 			})
 		})();
-
 		var radios = {};
 		var event = new Event('change');
-
 
 		if (Fields.inputFields && Fields.inputFields.length) {
 			for (field = 0; field < Fields.inputFields.length; field++) {
 				var type = Fields.inputFields[field].type;
 				if (type) {
 					switch (type) {
-
 						case "date":
 							var date = {};
 							if (Fields.inputFields[field].min) {
@@ -91,10 +76,7 @@
 							if (!date.max) {
 								date.max = date.min + (365 * 24 * 60 * 60 * 1000);
 							}
-
-
 							date.date = Math.floor(Math.random() * (date.max - date.min)) + date.min;
-
 							Fields.inputFields[field].value = moment(date.date).format('YYYY-MM-DD');
 							Fields.inputFields[field].dispatchEvent(event);
 							validator(Fields.inputFields[field]);
@@ -111,7 +93,6 @@
 							Fields.inputFields[field].value = valueAssosicate(Fields.inputFields[field]);
 							Fields.inputFields[field].dispatchEvent(event);
 							validator(Fields.inputFields[field]);
-
 							break;
 
 						case "url":
@@ -122,7 +103,6 @@
 							break;
 
 						case "radio":
-
 							if (Fields.inputFields[field].name) {
 								if (!radios[Fields.inputFields[field].name]) {
 									radios[Fields.inputFields[field].name] = [Fields.inputFields[field]];
@@ -140,6 +120,12 @@
 							validator(Fields.inputFields[field]);
 							break;
 
+						case "number":
+							Fields.inputFields[field].value = Math.floor(Math.random() * 1000) ;
+							Fields.inputFields[field].dispatchEvent(event);
+							validator(Fields.inputFields[field]);
+							break;
+
 
 						default:
 
@@ -152,7 +138,6 @@
 		} else {
 			Fields.inputFields = [];
 		}
-
 		if (Object.keys(radios).length) {
 			for (radio in radios) {
 				if (radios[radio].length) {
@@ -161,8 +146,6 @@
 				}
 			}
 		}
-
-
 		if (Fields.selectFields && Fields.selectFields.length) {
 			for (field = 0; field < Fields.selectFields.length; field++) {
 				Fields.selectFields[field].value = Fields.selectFields[field].options[Math.floor(Math.random() * Fields.selectFields[field].options.length)].value;
@@ -172,7 +155,6 @@
 		} else {
 			Fields.selectFields = [];
 		}
-
 		if (Fields.textareaFields && Fields.textareaFields.length) {
 			for (area = 0; area < Fields.textareaFields.length; area++) {
 				Fields.textareaFields[area].value = "The one ring to rule them all !"
